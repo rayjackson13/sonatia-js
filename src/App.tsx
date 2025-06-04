@@ -5,7 +5,9 @@ import { Router } from './pages/router'
 export const App: FC = () => {
   const getProgramLocation = useCallback(async () => {
     const location = await window.electronAPI.getProgramLocation()
-    console.log('location', location)
+    if (location) {
+      console.log('location', location)
+    }
   }, [])
 
   const getProjects = useCallback(async () => {
@@ -13,10 +15,16 @@ export const App: FC = () => {
     console.log('projects', projects)
   }, [])
 
+  const getProjectFolders = useCallback(async () => {
+    const folders = await window.electronAPI.getProjectFolders()
+    console.log('folders', folders)
+  }, [])
+
   useEffect(() => {
     getProgramLocation()
     getProjects()
-  }, [getProgramLocation, getProjects])
+    getProjectFolders()
+  }, [getProgramLocation, getProjects, getProjectFolders])
 
   return (
     <div className="w-screen h-screen flex flex-col bg-bg">

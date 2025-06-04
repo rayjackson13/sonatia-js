@@ -2,14 +2,16 @@ const { app, BrowserWindow, ipcMain } = require('electron')
 const { exec } = require('child_process')
 const path = require('path')
 
-const findProgram = require('./helpers/findProgram.cjs')
-const findProjects = require('./helpers/findProjects.cjs')
+const ProjectsHandler = require('./helpers/ProjectsHandler.cjs')
+const SettingsHandler = require('./helpers/SettingsHandler.cjs')
+const Database = require('./db/database.cjs')
 
 const viteProcess = exec('yarn vite')
 
 let mainWindow
+const db = new Database()
 
-const handleDevTools = () => {
+function handleDevTools() {
   mainWindow.webContents.on('before-input-event', (event, input) => {
     if (input.key === 'F12' || (input.control && input.shift && input.key === 'I')) {
       mainWindow.webContents.openDevTools()
@@ -17,7 +19,7 @@ const handleDevTools = () => {
   })
 }
 
-app.whenReady().then(() => {
+function initializeWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 900,
@@ -38,6 +40,16 @@ app.whenReady().then(() => {
   handleDevTools()
 
   mainWindow.loadURL('http://localhost:5173/')
+}
+
+async function loadData() {
+  await Promise.allSettled([SettingsHandler.initialize(), ProjectsHandler.initialize('D:\\Music')])
+}
+
+app.whenReady().then(async () => {
+  await loadData()
+
+  initializeWindow()
 })
 
 app.on('window-all-closed', () => {
@@ -48,10 +60,14 @@ app.on('before-quit', () => {
   viteProcess.kill()
 })
 
-ipcMain.handle('getProgramLocation', async (event) => {
-  return await findProgram('ableton')
+ipcMain.handle('getProgramLocation', async () => {
+  return SettingsHandler.programPath
 })
 
-ipcMain.handle('getProjects', async (event, folders) => {
-  return await findProjects(folders)
+ipcMain.handle('getProjectFolders', async () => {
+  return new Promise(resolve => db.getProjectFolders(resolve))
+})
+
+ipcMain.handle('getProjects', async () => {
+  return ProjectsHandler.projects
 })

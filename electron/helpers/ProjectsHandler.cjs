@@ -10,8 +10,14 @@ function findProjects(directories) {
     })
     let output = ''
 
-    ps.stdout.on('data', (data) => (output += data.toString()))
-    ps.stderr.on('data', (data) => console.error(`An error occured while trying to find projects:`, data.toString()))
+    ps.stdout.on('data', (data) => {
+      output += data.toString()
+    })
+
+    ps.stderr.on('data', (data) => {
+      console.error(`An error occured while trying to find projects:`, data.toString())
+    })
+
     ps.on('close', () => {
       try {
         const projectPaths = JSON.parse(output)
@@ -24,4 +30,16 @@ function findProjects(directories) {
   })
 }
 
-module.exports = findProjects
+class ProjectsHandler {
+  _projects = []
+
+  static async initialize(directories = []) {
+    ProjectsHandler._projects = await findProjects(directories)
+  }
+
+  static get projects() {
+    return ProjectsHandler._projects
+  }
+}
+
+module.exports = ProjectsHandler

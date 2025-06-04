@@ -1,3 +1,7 @@
 import type { FC } from 'react'
 
-export const SettingsPage: FC = () => <div>This is settings page.</div>
+const ProgramLocationSection: FC = () => {
+  
+}
+
+export const SettingsPage: FC = () => <div className="container py-24 flex flex-col">S</div>
