@@ -24,7 +24,8 @@
     "noUncheckedSideEffectImports": true,
     "paths": {
       "assets/*": ["./src/assets/*"],
-      "components/*": ["./src/components/*"]
+      "components/*": ["./src/components/*"],
+      "constants/*": ["./src/constants/*"]
     },
 
   },

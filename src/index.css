@@ -25,6 +25,11 @@
   --color-violet: #C2369F;
 }
 
+@utility container {
+  max-width: 800px;
+  padding-inline: 48px;
+}
+
 :root {
   font-family: "Inter", sans-serif;
   line-height: 1.5;
@@ -80,4 +85,12 @@ body {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+button {
+  @apply flex items-center hover:opacity-70 active:opacity-50 cursor-pointer transition-all;
 }
