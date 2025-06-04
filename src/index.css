@@ -76,7 +76,7 @@ body {
 }
 
 .text-gradient {
-  background: linear-gradient(235deg, var(--color-orange) 0%, var(--color-violet) 82%);
+  background: linear-gradient(-45deg, var(--color-orange) 18%, var(--color-violet) 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

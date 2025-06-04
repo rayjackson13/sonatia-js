@@ -24,7 +24,7 @@ app.whenReady().then(() => {
     titleBarOverlay: {
       color: '#2C2C2C',
       symbolColor: '#FFFFFF',
-      height: 48,
+      height: 40,
     },
     backgroundColor: '#2C2C2C',
     webPreferences: {
