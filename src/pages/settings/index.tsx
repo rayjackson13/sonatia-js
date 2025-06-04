@@ -1,7 +1,11 @@
 import type { FC } from 'react'
+import { ProgramLocationSection } from './views/ProgramSection'
+import { FoldersSection } from './views/FoldersSection'
 
-const ProgramLocationSection: FC = () => {
-  
-}
+export const SettingsPage: FC = () => (
+  <div className="container py-24 flex flex-col gap-6">
+    <FoldersSection />
 
-export const SettingsPage: FC = () => <div className="container py-24 flex flex-col">S</div>
+    <ProgramLocationSection />
+  </div>
+)

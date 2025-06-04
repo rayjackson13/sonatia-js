@@ -3,28 +3,14 @@ import { RouterProvider } from 'react-router'
 import { Router } from './pages/router'
 
 export const App: FC = () => {
-  const getProgramLocation = useCallback(async () => {
-    const location = await window.electronAPI.getProgramLocation()
-    if (location) {
-      console.log('location', location)
-    }
-  }, [])
-
   const getProjects = useCallback(async () => {
     const projects = await window.electronAPI.getProjects(['D:\\Music'])
     console.log('projects', projects)
   }, [])
 
-  const getProjectFolders = useCallback(async () => {
-    const folders = await window.electronAPI.getProjectFolders()
-    console.log('folders', folders)
-  }, [])
-
   useEffect(() => {
-    getProgramLocation()
     getProjects()
-    getProjectFolders()
-  }, [getProgramLocation, getProjects, getProjectFolders])
+  }, [getProjects])
 
   return (
     <div className="w-screen h-screen flex flex-col bg-bg">

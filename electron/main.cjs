@@ -1,15 +1,14 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 const { exec } = require('child_process')
 const path = require('path')
 
 const ProjectsHandler = require('./helpers/ProjectsHandler.cjs')
 const SettingsHandler = require('./helpers/SettingsHandler.cjs')
-const Database = require('./db/database.cjs')
+const db = require('./db/database.cjs')
 
 const viteProcess = exec('yarn vite')
 
 let mainWindow
-const db = new Database()
 
 function handleDevTools() {
   mainWindow.webContents.on('before-input-event', (event, input) => {
@@ -43,7 +42,8 @@ function initializeWindow() {
 }
 
 async function loadData() {
-  await Promise.allSettled([SettingsHandler.initialize(), ProjectsHandler.initialize('D:\\Music')])
+  await db.init()
+  await Promise.all([SettingsHandler.initialize(), ProjectsHandler.initialize('D:\\Music')])
 }
 
 app.whenReady().then(async () => {
@@ -65,9 +65,41 @@ ipcMain.handle('getProgramLocation', async () => {
 })
 
 ipcMain.handle('getProjectFolders', async () => {
-  return new Promise(resolve => db.getProjectFolders(resolve))
+  return new Promise((resolve) => db.getProjectFolders(resolve))
 })
 
 ipcMain.handle('getProjects', async () => {
   return ProjectsHandler.projects
+})
+
+ipcMain.handle('selectProgram', async () => {
+  const result = await dialog.showOpenDialog(mainWindow, {
+    properties: ['openFile'],
+    filters: [{ name: 'Executable Files', extensions: ['exe'] }],
+  })
+
+  const location = result.filePaths[0] || null
+
+  if (location) {
+    db.updateProgramPath(location)
+    SettingsHandler.programPath = location
+  }
+
+  return location
+})
+
+ipcMain.handle('addProjectFolder', async () => {
+  const result = await dialog.showOpenDialog(mainWindow, {
+    properties: ['openDirectory'],
+  })
+
+  const location = result.filePaths[0] || null
+
+  if (location) {
+    await db.addProjectFolder(location)
+  }
+})
+
+ipcMain.handle('removeProjectFolder', async (event, id) => {
+  await db.removeProjectFolder(id)
 })

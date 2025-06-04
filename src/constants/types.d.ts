@@ -5,9 +5,14 @@ type ProjectFolder = {
 
 export interface ElectronAPI {
   ping: () => void
+
+  getProjectFolders: () => Promise<ProjectFolder[]>
+  removeProjectFolder: (id: number) => Promise<void>
+  addProjectFolder: () => Promise<void>
+
   getProgramLocation: () => Promise<string>
   getProjects: (folders: string[]) => Promise<string[]>
-  getProjectFolders: () => Promise<ProjectFolder[]>
+  selectProgram: () => string | null
 }
 
 declare global {
