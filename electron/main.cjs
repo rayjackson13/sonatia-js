@@ -1,9 +1,10 @@
-const { app, BrowserWindow, dialog, ipcMain } = require('electron')
+const { app, BrowserWindow, dialog, ipcMain, shell } = require('electron')
 const { exec, spawn } = require('child_process')
 const path = require('path')
 
 const ProjectsHandler = require('./helpers/ProjectsHandler.cjs')
 const SettingsHandler = require('./helpers/SettingsHandler.cjs')
+const runProgram = require('./utils/runProgram.cjs')
 const db = require('./db/database.cjs')
 
 const viteProcess = exec('yarn vite')
@@ -104,16 +105,20 @@ ipcMain.handle('removeProjectFolder', async (event, id) => {
   await db.removeProjectFolder(id)
 })
 
-ipcMain.handle('newSession', () => {
-  const runtime = spawn(`${SettingsHandler.programPath}`, [], {
-    detached: true,
-    stdio: 'ignore',
+ipcMain.handle('newSession', runProgram)
+
+ipcMain.handle('addExistingProject', async () => {
+  const file = await dialog.showOpenDialog(mainWindow, {
+    properties: ['openFile'],
+    filters: [{ name: 'Ableton Projects', extensions: ['als'] }],
   })
 
-  runtime.unref()
+  const location = file.filePaths[0] || null
+  if (!location) return
 
-  runtime.on('close', (code) => {
-    // TODO: rescan project files
-    console.log(`Process exited with code ${code}`)
-  })
+  const directory = path.dirname(location)
+  db.addProjectFolder(directory)
+  // TODO: rescan project files
+
+  runProgram([location])
 })

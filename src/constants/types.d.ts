@@ -5,6 +5,7 @@ type ProjectFolder = {
 
 export interface ElectronAPI {
   newSession: () => void
+  addExistingProject: () => Promise<void>
 
   getProjectFolders: () => Promise<ProjectFolder[]>
   removeProjectFolder: (id: number) => Promise<void>

@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
   newSession: () => ipcRenderer.invoke('newSession'),
+  addExistingProject: () => ipcRenderer.invoke('addExistingProject'),
 
   addProjectFolder: () => ipcRenderer.invoke('addProjectFolder'),
   getProjectFolders: () => ipcRenderer.invoke('getProjectFolders'),

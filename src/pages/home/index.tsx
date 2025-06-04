@@ -15,6 +15,10 @@ export const HomePage: FC = () => {
     window.electronAPI.newSession()
   }
 
+  const openProject = (): void => {
+    window.electronAPI.addExistingProject()
+  }
+
   const openSettings = (): void => {
     navigate(settings.path)
   }
@@ -27,7 +31,7 @@ export const HomePage: FC = () => {
           New session
         </button>
 
-        <button className="w-full gap-3 h-6" onClick={openSettings}>
+        <button className="w-full gap-3 h-6" onClick={openProject}>
           <OpenFileIcon />
           Open project...
         </button>
