@@ -1,11 +1,26 @@
-import { type FC } from 'react'
+import { useCallback, useEffect, type FC } from 'react'
 import { RouterProvider } from 'react-router'
 import { Router } from './pages/router'
 
 export const App: FC = () => {
+  const getProgramLocation = useCallback(async () => {
+    const location = await window.electronAPI.getProgramLocation()
+    console.log('location', location)
+  }, [])
+
+  const getProjects = useCallback(async () => {
+    const projects = await window.electronAPI.getProjects(['D:\\Music'])
+    console.log('projects', projects)
+  }, [])
+
+  useEffect(() => {
+    getProgramLocation()
+    getProjects()
+  }, [getProgramLocation, getProjects])
+
   return (
     <div className="w-screen h-screen flex flex-col bg-bg">
-        <RouterProvider router={Router} />
+      <RouterProvider router={Router} />
     </div>
   )
 }

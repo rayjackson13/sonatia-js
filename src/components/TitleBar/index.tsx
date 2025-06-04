@@ -10,12 +10,6 @@ export const TitleBar: FC = () => {
 
   const isHomePage = useMemo(() => location.pathname === PAGES.home.path, [location.pathname])
 
-  console.log(
-    Object.values(PAGES),
-    location.pathname,
-    Object.values(PAGES).find((page) => page.path === location.pathname)
-  )
-
   const pageTitle: string = useMemo(
     () => Object.values(PAGES).find((page) => page.path === location.pathname)?.title ?? '',
     [location.pathname]

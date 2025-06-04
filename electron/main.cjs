@@ -2,6 +2,9 @@ const { app, BrowserWindow, ipcMain } = require('electron')
 const { exec } = require('child_process')
 const path = require('path')
 
+const findProgram = require('./helpers/findProgram.cjs')
+const findProjects = require('./helpers/findProjects.cjs')
+
 const viteProcess = exec('yarn vite')
 
 let mainWindow
@@ -43,4 +46,12 @@ app.on('window-all-closed', () => {
 
 app.on('before-quit', () => {
   viteProcess.kill()
+})
+
+ipcMain.handle('getProgramLocation', async (event) => {
+  return await findProgram('ableton')
+})
+
+ipcMain.handle('getProjects', async (event, folders) => {
+  return await findProjects(folders)
 })

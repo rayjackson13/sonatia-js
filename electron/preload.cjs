@@ -1,5 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  ping: () => console.log('pong'),
+  getProgramLocation: () => ipcRenderer.invoke('getProgramLocation'),
+  getProjects: (folders) => ipcRenderer.invoke('getProjects', folders),
 })
