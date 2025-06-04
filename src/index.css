@@ -44,6 +44,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   user-select: none;
+  color-scheme: dark;
 }
 
 document,
@@ -76,21 +77,6 @@ body {
   height: 100%;
 }
 
-.inner-shadow-logo {
-  box-shadow: inset -4px -4px 4px 0 rgba(0, 0, 0, .12);
-}
-
-.inner-shadow {
-  box-shadow: inset 0 0 8px 0 rgba(0, 0, 0, .25);
-}
-
-.text-gradient {
-  background: linear-gradient(-45deg, var(--color-orange) 18%, var(--color-violet) 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 .no-drag {
   -webkit-app-region: no-drag;
 }
@@ -101,6 +87,34 @@ body {
   }
 }
 
-.section-title {
-  @apply text-2xl leading-none font-semibold py-2;
+@layer components {
+  .inner-shadow-logo {
+    box-shadow: inset -4px -4px 4px 0 rgba(0, 0, 0, .12);
+  }
+
+  .inner-shadow {
+    @apply bg-bg-deeper;
+    box-shadow: inset 0 0 8px 0 rgba(0, 0, 0, .25);
+    scrollbar-color: var(--color-font-grey) var(--color-bg-deeper);
+    scrollbar-width: thin;
+  }
+
+  .text-gradient {
+    background: linear-gradient(-45deg, var(--color-orange) 18%, var(--color-violet) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .section-title {
+    @apply text-2xl leading-none font-semibold py-2;
+  }
+
+  .section-list {
+    @apply flex flex-col p-2 rounded-md gap-1 overflow-auto;
+  }
+
+  .section-list-item {
+    @apply flex gap-3 items-center h-8 hover:bg-grey-hover px-2 rounded-sm transition-all shrink-0;
+  }
 }

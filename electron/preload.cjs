@@ -7,7 +7,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   addProjectFolder: () => ipcRenderer.invoke('addProjectFolder'),
   getProjectFolders: () => ipcRenderer.invoke('getProjectFolders'),
   removeProjectFolder: (id) => ipcRenderer.invoke('removeProjectFolder', id),
+
+  getProjects: () => ipcRenderer.invoke('getProjects'),
+  openProject: (path) => ipcRenderer.invoke('openProject', path),
+  rescanProjects: () => ipcRenderer.invoke('rescanProjects'),
+
   getProgramLocation: () => ipcRenderer.invoke('getProgramLocation'),
-  getProjects: (folders) => ipcRenderer.invoke('getProjects', folders),
   selectProgram: () => ipcRenderer.invoke('selectProgram'),
 })

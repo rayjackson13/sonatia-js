@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState, type FC, type JSX } from 'react'
 import type { ProjectFolder } from 'constants/types'
 
 import AddIcon from 'assets/svg/plus.svg?react'
-import FileIcon from 'assets/svg/file.svg?react'
+import FolderIcon from 'assets/svg/folder.svg?react'
 import RemoveIcon from 'assets/svg/remove.svg?react'
 
 export const FoldersSection: FC = () => {
@@ -35,11 +35,8 @@ export const FoldersSection: FC = () => {
   const renderFolderItem = useCallback(
     (folder: ProjectFolder): JSX.Element => {
       return (
-        <div
-          key={folder.id}
-          className="flex gap-3 items-center h-8 hover:bg-grey-hover px-2 rounded-sm group transition-all"
-        >
-          <FileIcon />
+        <div key={folder.id} className="section-list-item group">
+          <FolderIcon />
 
           <span className="text-font-grey flex-1 truncate">{folder.path}</span>
 
@@ -56,7 +53,7 @@ export const FoldersSection: FC = () => {
     <div className="flex flex-col gap-2">
       <p className="section-title">Project Folders</p>
 
-      <div className="flex flex-col inner-shadow bg-bg-deeper p-2 rounded-md gap-1">
+      <div className="section-list inner-shadow">
         <button
           className="flex gap-3 items-center h-8 hover:bg-grey-hover active:bg-grey-selected px-2 rounded-sm opacity-100"
           onClick={addFolder}

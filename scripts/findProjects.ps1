@@ -1,4 +1,4 @@
-param ($folders)
+param ([string[]]$folders = @())
 
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 

@@ -1,16 +1,22 @@
 const path = require('path')
 const { spawn } = require('child_process')
+const db = require('../db/database.cjs')
 
 const PS_SCRIPT_PATH = path.resolve(__dirname, '../..', 'scripts/findProjects.ps1')
 
-function findProjects(directories) {
+function findProjects(directories = []) {
   return new Promise((resolve, reject) => {
-    const ps = spawn('powershell.exe', ['-ExecutionPolicy', 'Bypass', '-File', PS_SCRIPT_PATH, directories], {
-      encoding: 'utf-8',
-    })
+    const ps = spawn(
+      'powershell.exe',
+      ['-ExecutionPolicy', 'Bypass', '-Command', PS_SCRIPT_PATH, directories.join(',')],
+      {
+        encoding: 'utf-8',
+      }
+    )
     let output = ''
 
     ps.stdout.on('data', (data) => {
+      console.log(data)
       output += data.toString()
     })
 
@@ -20,11 +26,12 @@ function findProjects(directories) {
 
     ps.on('close', () => {
       try {
+        console.log('output', output)
         const projectPaths = JSON.parse(output)
         resolve(projectPaths)
       } catch (e) {
         console.error('An error occured while trying to find projects:', e)
-        reject()
+        reject([])
       }
     })
   })
@@ -33,8 +40,10 @@ function findProjects(directories) {
 class ProjectsHandler {
   _projects = []
 
-  static async initialize(directories = []) {
-    ProjectsHandler._projects = await findProjects(directories)
+  static async scan() {
+    const folders = await db.getProjectFolders()
+    const folderPaths = folders.map((item) => `"${item.path}"`)
+    ProjectsHandler._projects = await findProjects(folderPaths)
   }
 
   static get projects() {

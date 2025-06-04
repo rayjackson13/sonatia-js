@@ -44,7 +44,7 @@ function initializeWindow() {
 
 async function loadData() {
   await db.init()
-  await Promise.all([SettingsHandler.initialize(), ProjectsHandler.initialize('D:\\Music')])
+  await Promise.all([SettingsHandler.initialize(), ProjectsHandler.scan()])
 }
 
 app.whenReady().then(async () => {
@@ -66,7 +66,7 @@ ipcMain.handle('getProgramLocation', async () => {
 })
 
 ipcMain.handle('getProjectFolders', async () => {
-  return new Promise((resolve) => db.getProjectFolders(resolve))
+  return await db.getProjectFolders()
 })
 
 ipcMain.handle('getProjects', async () => {
@@ -121,4 +121,13 @@ ipcMain.handle('addExistingProject', async () => {
   // TODO: rescan project files
 
   runProgram([location])
+})
+
+ipcMain.handle('openProject', async (event, path) => {
+  runProgram([path])
+})
+
+ipcMain.handle('rescanProjects', async () => {
+  await ProjectsHandler.scan()
+  return ProjectsHandler.projects
 })

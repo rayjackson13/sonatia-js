@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 import NewFileIcon from 'assets/svg/plus.svg?react'
 import OpenFileIcon from 'assets/svg/folder-open.svg?react'
 import SettingsIcon from 'assets/svg/gear.svg?react'
+import { RecentsView } from './views/Recents'
 
 const { settings } = PAGES
 
@@ -24,7 +25,9 @@ export const HomePage: FC = () => {
   }
 
   return (
-    <div className="container py-24 flex flex-col">
+    <div className="container py-24 flex flex-col gap-12">
+      <RecentsView />
+
       <div className="gap-4 flex flex-col">
         <button className="w-full gap-3 h-6" onClick={openNewSession}>
           <NewFileIcon />

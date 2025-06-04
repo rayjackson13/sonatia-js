@@ -57,10 +57,16 @@ class Database {
     })
   }
 
-  static getProjectFolders(callback) {
-    this.db.all('SELECT * FROM folders', (err, rows) => {
-      if (err) console.error('Query error:', err)
-      else callback(rows)
+  static getProjectFolders() {
+    return new Promise((resolve, reject) => {
+      this.db.all('SELECT * FROM folders', (err, rows) => {
+        if (err) {
+          console.error('Query error:', err)
+          reject(err)
+        } else {
+          resolve(rows)
+        }
+      })
     })
   }
 
