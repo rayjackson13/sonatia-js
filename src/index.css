@@ -1,7 +1,32 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Segoe Fluent Icons";
+  src: url("/fonts/Segoe Fluent Icons.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@theme {
+  --color-bg: #2C2C2C;
+  --color-bg-deeper: #282828;
+  --color-font-grey: #ECECEC;
+  --color-font-disabled: #B3B3B3;
+  --color-grey-hover: #4E4E4E;
+  --color-grey-selected: #424242;
+  --color-orange: #E75A2A;
+  --color-violet: #C2369F;
+}
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Inter", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -13,63 +38,46 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  user-select: none;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: #535bf2;
-}
-
+document,
 body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  font-size: 16px;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+#title-bar {
+  -webkit-app-region: drag;
+  /* Allows dragging the window */
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+#window-controls {
+  height: 100%;
+}
+
+#window-controls button {
+  border: none;
   cursor: pointer;
-  transition: border-color 0.25s;
+  -webkit-app-region: no-drag;
+  /* Prevent buttons from dragging */
+  font-family: "Segoe Fluent Icons";
+  font-size: 10px;
+  width: 48px;
+  height: 100%;
 }
 
-button:hover {
-  border-color: #646cff;
+.inner-shadow {
+  box-shadow: inset -4px -4px 4px 0 rgba(0, 0, 0, .12);
 }
 
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: #747bff;
-  }
-
-  button {
-    background-color: #f9f9f9;
-  }
+.text-gradient {
+  background: linear-gradient(235deg, var(--color-orange) 0%, var(--color-violet) 82%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

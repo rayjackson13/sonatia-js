@@ -1,5 +1,5 @@
-const { contextBridge } = require("electron");
+const { contextBridge, ipcRenderer } = require('electron')
 
-contextBridge.exposeInMainWorld("electronAPI", {
-    ping: () => console.log("Electron API works!")
-});
+contextBridge.exposeInMainWorld('electronAPI', {
+  ping: () => console.log('pong'),
+})
