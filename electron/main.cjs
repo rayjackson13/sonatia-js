@@ -1,5 +1,5 @@
 const { app, BrowserWindow, dialog, ipcMain } = require('electron')
-const { exec } = require('child_process')
+const { exec, spawn } = require('child_process')
 const path = require('path')
 
 const ProjectsHandler = require('./helpers/ProjectsHandler.cjs')
@@ -102,4 +102,18 @@ ipcMain.handle('addProjectFolder', async () => {
 
 ipcMain.handle('removeProjectFolder', async (event, id) => {
   await db.removeProjectFolder(id)
+})
+
+ipcMain.handle('newSession', () => {
+  const runtime = spawn(`${SettingsHandler.programPath}`, [], {
+    detached: true,
+    stdio: 'ignore',
+  })
+
+  runtime.unref()
+
+  runtime.on('close', (code) => {
+    // TODO: rescan project files
+    console.log(`Process exited with code ${code}`)
+  })
 })

@@ -11,6 +11,10 @@ const { settings } = PAGES
 export const HomePage: FC = () => {
   const navigate = useNavigate()
 
+  const openNewSession = (): void => {
+    window.electronAPI.newSession()
+  }
+
   const openSettings = (): void => {
     navigate(settings.path)
   }
@@ -18,14 +22,16 @@ export const HomePage: FC = () => {
   return (
     <div className="container py-24 flex flex-col">
       <div className="gap-4 flex flex-col">
-        <button className="w-full gap-3 h-6" onClick={openSettings}>
+        <button className="w-full gap-3 h-6" onClick={openNewSession}>
           <NewFileIcon />
           New session
         </button>
+
         <button className="w-full gap-3 h-6" onClick={openSettings}>
           <OpenFileIcon />
           Open project...
         </button>
+
         <button className="w-full gap-3 h-6" onClick={openSettings}>
           <SettingsIcon />
           Settings

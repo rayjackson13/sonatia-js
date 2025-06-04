@@ -4,7 +4,7 @@ type ProjectFolder = {
 }
 
 export interface ElectronAPI {
-  ping: () => void
+  newSession: () => void
 
   getProjectFolders: () => Promise<ProjectFolder[]>
   removeProjectFolder: (id: number) => Promise<void>
