@@ -1,13 +1,13 @@
-import path from 'path'
 import { spawn } from 'child_process'
 import db from '../db/database'
 
+import script from '../../../resources/findProgram.ps1?asset&asarUnpack'
+
 const PROGRAM_NAME = 'ableton'
-const PS_SCRIPT_PATH = path.resolve(__dirname, '../..', 'scripts/findProgram.ps1')
 
 function findProgram(): Promise<string> {
   return new Promise((resolve) => {
-    const args = ['-ExecutionPolicy', 'Bypass', '-File', PS_SCRIPT_PATH, PROGRAM_NAME]
+    const args = ['-ExecutionPolicy', 'Bypass', '-File', script, PROGRAM_NAME]
     const ps = spawn('powershell.exe', args)
 
     let output = ''

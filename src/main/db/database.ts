@@ -1,9 +1,14 @@
 import sqlite3 from 'sqlite3'
+import fs from 'fs'
 import path from 'path'
 import { app } from 'electron'
 import type { ProjectFolder } from '../../types'
 
-const dbPath = path.join(app.getPath('userData'), 'projects.db')
+const dbPath = path.join(app.getPath('userData'), 'Sonatia', 'projects.db')
+
+if (!fs.existsSync(path.dirname(dbPath))) {
+  fs.mkdirSync(path.dirname(dbPath), { recursive: true })
+}
 
 class Database {
   static db = new sqlite3.Database(dbPath, (err) => {

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState, type FC, type JSX } from 'react'
 
 import FileIcon from 'assets/svg/file.svg?react'
 import ReloadIcon from 'assets/svg/refresh.svg?react'
+import { formatTime } from '../helpers/formatTime'
 
 const projectsAPI = window.electronAPI.projects
 
@@ -36,18 +37,24 @@ export const RecentsView: FC = () => {
 
   const renderProjectItem = useCallback(
     (project: Project): JSX.Element => {
+      const date = formatTime(project.lastModified)
+
       return (
         <div key={project.path} className="section-list-item group">
           <FileIcon />
 
           <span className="text-font-grey flex-1 truncate">{project.name}</span>
 
-          <button
-            className="hidden group-hover:block text-sm bg-white rounded-sm text-grey-selected px-1"
-            onClick={() => openProject(project.path)}
-          >
-            Open in DAW
-          </button>
+          <div className="flex gap-3 items-center">
+            <button
+              className="hidden group-hover:block text-sm bg-white text-black rounded-sm px-1"
+              onClick={() => openProject(project.path)}
+            >
+              Open in DAW
+            </button>
+
+            <span className="group-hover:hidden text-font-disabled text-xs">{date}</span>
+          </div>
         </div>
       )
     },
@@ -57,14 +64,21 @@ export const RecentsView: FC = () => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between">
-        <p className="section-title">Recents</p>
+        <p className="section-title">
+          Recents{' '}
+          <span className="text-font-disabled text-lg font-normal leading-none">
+            ({projects.length})
+          </span>
+        </p>
 
         <button onClick={rescanProjects}>
           <ReloadIcon />
         </button>
       </div>
 
-      <div className="section-list inner-shadow h-100">{projects.map(renderProjectItem)}</div>
+      <div className="section-list inner-shadow h-100">
+        {(projects ?? []).map(renderProjectItem)}
+      </div>
     </div>
   )
 }
