@@ -2,17 +2,20 @@ import type { ElectronAPI, Project } from '../types'
 import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron'
 
 const api: ElectronAPI = {
-  newSession: () => ipcRenderer.invoke('newSession'),
-  addExistingProject: () => ipcRenderer.invoke('addExistingProject'),
+  folders: {
+    add: () => ipcRenderer.invoke('addProjectFolder'),
+    get: () => ipcRenderer.invoke('getProjectFolders'),
+    remove: (id: number) => ipcRenderer.invoke('removeProjectFolder', id),
+  },
 
-  addProjectFolder: () => ipcRenderer.invoke('addProjectFolder'),
-  getProjectFolders: () => ipcRenderer.invoke('getProjectFolders'),
-  removeProjectFolder: (id: number) => ipcRenderer.invoke('removeProjectFolder', id),
-
-  getProgramLocation: () => ipcRenderer.invoke('getProgramLocation'),
-  selectProgram: () => ipcRenderer.invoke('selectProgram'),
+  program: {
+    get: () => ipcRenderer.invoke('getProgramLocation'),
+    select: () => ipcRenderer.invoke('selectProgram'),
+  },
 
   projects: {
+    new: () => ipcRenderer.invoke('newSession'),
+    add: () => ipcRenderer.invoke('addExistingProject'),
     get: () => ipcRenderer.invoke('getProjects'),
     open: (path: string) => ipcRenderer.invoke('openProject', path),
     rescan: () => ipcRenderer.invoke('rescanProjects'),

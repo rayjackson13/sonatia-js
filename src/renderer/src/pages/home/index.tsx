@@ -7,17 +7,19 @@ import OpenFileIcon from 'assets/svg/folder-open.svg?react'
 import SettingsIcon from 'assets/svg/gear.svg?react'
 import { RecentsView } from './views/Recents'
 
+const projectsAPI = window.electronAPI.projects
+
 const { settings } = PAGES
 
 export const HomePage: FC = () => {
   const navigate = useNavigate()
 
   const openNewSession = (): void => {
-    window.electronAPI.newSession()
+    projectsAPI.new()
   }
 
   const openProject = (): void => {
-    window.electronAPI.addExistingProject()
+    projectsAPI.add()
   }
 
   const openSettings = (): void => {

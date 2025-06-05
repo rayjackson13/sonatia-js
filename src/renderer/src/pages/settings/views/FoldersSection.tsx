@@ -5,11 +5,13 @@ import AddIcon from 'assets/svg/plus.svg?react'
 import FolderIcon from 'assets/svg/folder.svg?react'
 import RemoveIcon from 'assets/svg/remove.svg?react'
 
+const folderAPI = window.electronAPI.folders
+
 export const FoldersSection: FC = () => {
   const [folders, setFolders] = useState<ProjectFolder[]>([])
 
   const loadProjectFolders = useCallback(async () => {
-    const folders = await window.electronAPI.getProjectFolders()
+    const folders = await folderAPI.get()
     if (folders) {
       setFolders(folders)
     }
@@ -17,14 +19,14 @@ export const FoldersSection: FC = () => {
 
   const removeFolder = useCallback(
     async (id: number) => {
-      await window.electronAPI.removeProjectFolder(id)
+      await folderAPI.remove(id)
       loadProjectFolders()
     },
     [loadProjectFolders],
   )
 
   const addFolder = useCallback(async () => {
-    await window.electronAPI.addProjectFolder()
+    await folderAPI.add()
     loadProjectFolders()
   }, [loadProjectFolders])
 

@@ -8,7 +8,6 @@ const projectsAPI = window.electronAPI.projects
 
 export const RecentsView: FC = () => {
   const [projects, setProjects] = useState<Project[]>([])
-  console.log('projects', projects)
 
   const rescanProjects = useCallback(async () => {
     const data = await projectsAPI.rescan()
@@ -25,7 +24,6 @@ export const RecentsView: FC = () => {
   }, [])
 
   const onProjectsUpdated = useCallback((data: Project[]) => {
-    console.log('projects updated')
     setProjects(data)
   }, [])
 

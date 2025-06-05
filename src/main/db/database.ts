@@ -8,7 +8,7 @@ const dbPath = path.join(app.getPath('userData'), 'projects.db')
 class Database {
   static db = new sqlite3.Database(dbPath, (err) => {
     if (err) console.error('Database connection error:', err)
-    else console.log('SQLite database connected:', dbPath)
+    else console.info('SQLite database connected:', dbPath)
   })
 
   static async init() {
@@ -26,19 +26,9 @@ class Database {
         `,
         (err) => {
           if (err) reject(err)
-          else {
-            console.log('init db')
-            resolve()
-          }
+          else resolve()
         },
       )
-    })
-  }
-
-  static async getTables() {
-    this.db.all("SELECT name FROM sqlite_master WHERE type='table'", [], (err, rows) => {
-      if (err) throw err
-      console.log(rows)
     })
   }
 
@@ -82,7 +72,6 @@ class Database {
   }
 
   static updateProgramPath(path: string) {
-    console.log('updateProgramPath')
     return new Promise<void>((resolve, reject) => {
       this.db.run('REPLACE INTO programs (id, path) VALUES (?, ?)', [1, path], (err) => {
         if (err) {
@@ -102,7 +91,6 @@ class Database {
           console.error('Query error:', err)
           reject(null)
         } else {
-          console.log('getProgramPath')
           resolve(row ? row.path : null)
         }
       })

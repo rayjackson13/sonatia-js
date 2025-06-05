@@ -23,7 +23,6 @@ async function loadData() {
 
 async function initializeWindow() {
   await db.init()
-  db.getTables()
 
   mainWindow = new BrowserWindow({
     width: 1200,

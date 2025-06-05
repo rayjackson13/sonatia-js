@@ -33,8 +33,6 @@ export class SettingsHandler {
   static async initialize() {
     const savedPath = await db.getProgramPath()
 
-    console.log('savedPath', savedPath)
-
     if (!savedPath) {
       const location = await findProgram()
       await db.updateProgramPath(location)

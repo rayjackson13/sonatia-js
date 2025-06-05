@@ -10,17 +10,20 @@ type ProjectFolder = {
 }
 
 export interface ElectronAPI {
-  newSession: () => void
-  addExistingProject: () => Promise<void>
+  folders: {
+    get: () => Promise<ProjectFolder[]>
+    remove: (id: number) => Promise<void>
+    add: () => Promise<void>
+  }
 
-  getProjectFolders: () => Promise<ProjectFolder[]>
-  removeProjectFolder: (id: number) => Promise<void>
-  addProjectFolder: () => Promise<void>
-
-  getProgramLocation: () => Promise<string>
-  selectProgram: () => Promise<string>
+  program: {
+    select: () => Promise<string>
+    get: () => Promise<string>
+  }
 
   projects: {
+    new: () => void
+    add: () => Promise<void>
     get: () => Promise<Project[]>
     open: (path: string) => Promise<void>
     rescan: () => Promise<Project[]>
