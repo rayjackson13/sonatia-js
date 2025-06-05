@@ -1,8 +1,8 @@
-const { spawn } = require('child_process')
-const SettingsHandler = require('../helpers/SettingsHandler.cjs')
-const ProjectsHandler = require('../helpers/ProjectsHandler.cjs')
+import { spawn } from 'child_process'
+import { SettingsHandler } from '../helpers/SettingsHandler'
+import { ProjectsHandler } from '../helpers/ProjectsHandler'
 
-function runProgram(args = []) {
+export function runProgram(args: string[] = []) {
   const runtime = spawn(`${SettingsHandler.programPath}`, args, {
     detached: true,
     stdio: 'ignore',
@@ -15,5 +15,3 @@ function runProgram(args = []) {
     console.info(`Ableton process exited with code ${code}`)
   })
 }
-
-module.exports = runProgram

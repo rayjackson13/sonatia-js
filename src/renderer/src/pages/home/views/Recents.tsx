@@ -1,4 +1,4 @@
-import type { Project } from 'constants/types'
+import type { Project } from 'src/types'
 import { useCallback, useEffect, useState, type FC, type JSX } from 'react'
 
 import FileIcon from 'assets/svg/file.svg?react'
@@ -53,7 +53,7 @@ export const RecentsView: FC = () => {
         </div>
       )
     },
-    [openProject]
+    [openProject],
   )
 
   return (

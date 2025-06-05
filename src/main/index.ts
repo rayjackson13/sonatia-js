@@ -1,18 +1,15 @@
-const { app, BrowserWindow, dialog, ipcMain, shell } = require('electron')
-const { exec, spawn } = require('child_process')
-const path = require('path')
+import { app, BrowserWindow, dialog, ipcMain } from 'electron'
+import path from 'path'
 
-const ProjectsHandler = require('./helpers/ProjectsHandler.cjs')
-const SettingsHandler = require('./helpers/SettingsHandler.cjs')
-const runProgram = require('./utils/runProgram.cjs')
-const db = require('./db/database.cjs')
+import { ProjectsHandler } from './helpers/ProjectsHandler'
+import { SettingsHandler } from './helpers/SettingsHandler'
+import { runProgram } from './utils/runProgram'
+import db from './db/database'
 
-const viteProcess = exec('yarn vite')
-
-let mainWindow
+let mainWindow: BrowserWindow
 
 function handleDevTools() {
-  mainWindow.webContents.on('before-input-event', (event, input) => {
+  mainWindow.webContents.on('before-input-event', (_, input) => {
     if (input.key === 'F12' || (input.control && input.shift && input.key === 'I')) {
       mainWindow.webContents.openDevTools()
     }
@@ -20,12 +17,14 @@ function handleDevTools() {
 }
 
 async function loadData() {
-  await db.init()
-  SettingsHandler.initialize(mainWindow)
+  SettingsHandler.initialize()
   ProjectsHandler.initialize(mainWindow)
 }
 
 async function initializeWindow() {
+  await db.init()
+  db.getTables()
+
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 900,
@@ -41,7 +40,8 @@ async function initializeWindow() {
     minHeight: 700,
     backgroundColor: '#2C2C2C',
     webPreferences: {
-      preload: path.join(__dirname, 'preload.cjs'),
+      preload: path.join(__dirname, '../preload/index.mjs'),
+      sandbox: false,
     },
   })
 
@@ -55,10 +55,6 @@ app.whenReady().then(initializeWindow)
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
-})
-
-app.on('before-quit', () => {
-  viteProcess.kill()
 })
 
 ipcMain.handle('getProgramLocation', async () => {
@@ -101,11 +97,11 @@ ipcMain.handle('addProjectFolder', async () => {
   }
 })
 
-ipcMain.handle('removeProjectFolder', async (event, id) => {
+ipcMain.handle('removeProjectFolder', async (_, id) => {
   await db.removeProjectFolder(id)
 })
 
-ipcMain.handle('newSession', runProgram)
+ipcMain.handle('newSession', () => runProgram())
 
 ipcMain.handle('addExistingProject', async () => {
   const file = await dialog.showOpenDialog(mainWindow, {
@@ -118,12 +114,12 @@ ipcMain.handle('addExistingProject', async () => {
 
   const directory = path.dirname(location)
   db.addProjectFolder(directory)
-  // TODO: rescan project files
+  ProjectsHandler.scan()
 
   runProgram([location])
 })
 
-ipcMain.handle('openProject', async (event, path) => {
+ipcMain.handle('openProject', async (_, path) => {
   runProgram([path])
 })
 

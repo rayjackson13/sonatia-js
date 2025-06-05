@@ -1,18 +1,15 @@
-const path = require('path')
-const { spawn } = require('child_process')
-const db = require('../db/database.cjs')
+import path from 'path'
+import { spawn } from 'child_process'
+import db from '../db/database'
+import type { BrowserWindow } from 'electron'
+import type { Project } from '../../src/constants/types'
 
 const PS_SCRIPT_PATH = path.resolve(__dirname, '../..', 'scripts/findProjects.ps1')
 
-function findProjects(directories = []) {
-  return new Promise((resolve, reject) => {
-    const ps = spawn(
-      'powershell.exe',
-      ['-ExecutionPolicy', 'Bypass', '-Command', PS_SCRIPT_PATH, directories.join(',')],
-      {
-        encoding: 'utf-8',
-      }
-    )
+function findProjects(directories: string[] = []) {
+  return new Promise<Project[]>((resolve, reject) => {
+    const args = ['-ExecutionPolicy', 'Bypass', '-Command', PS_SCRIPT_PATH, directories.join(',')]
+    const ps = spawn('powershell.exe', args)
     let output = ''
 
     ps.stdout.on('data', (data) => {
@@ -35,10 +32,11 @@ function findProjects(directories = []) {
   })
 }
 
-class ProjectsHandler {
-  static _projects = []
+export class ProjectsHandler {
+  static _projects: Project[] = []
+  static mainWindow: BrowserWindow
 
-  static async initialize(mainWindow) {
+  static async initialize(mainWindow: BrowserWindow) {
     this.mainWindow = mainWindow
     this.scan()
   }
@@ -54,5 +52,3 @@ class ProjectsHandler {
     return ProjectsHandler._projects
   }
 }
-
-module.exports = ProjectsHandler

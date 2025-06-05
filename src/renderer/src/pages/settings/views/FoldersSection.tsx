@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type FC, type JSX } from 'react'
-import type { ProjectFolder } from 'constants/types'
+import type { ProjectFolder } from 'src/types'
 
 import AddIcon from 'assets/svg/plus.svg?react'
 import FolderIcon from 'assets/svg/folder.svg?react'
@@ -20,7 +20,7 @@ export const FoldersSection: FC = () => {
       await window.electronAPI.removeProjectFolder(id)
       loadProjectFolders()
     },
-    [loadProjectFolders]
+    [loadProjectFolders],
   )
 
   const addFolder = useCallback(async () => {
@@ -40,13 +40,16 @@ export const FoldersSection: FC = () => {
 
           <span className="text-font-grey flex-1 truncate">{folder.path}</span>
 
-          <button className="hidden group-hover:block w-4 flex justify-end" onClick={() => removeFolder(folder.id)}>
+          <button
+            className="hidden group-hover:block w-4 flex justify-end"
+            onClick={() => removeFolder(folder.id)}
+          >
             <RemoveIcon />
           </button>
         </div>
       )
     },
-    [removeFolder]
+    [removeFolder],
   )
 
   return (

@@ -18,7 +18,7 @@ export interface ElectronAPI {
   addProjectFolder: () => Promise<void>
 
   getProgramLocation: () => Promise<string>
-  selectProgram: () => string | null
+  selectProgram: () => Promise<string>
 
   projects: {
     get: () => Promise<Project[]>

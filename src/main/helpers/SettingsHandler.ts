@@ -1,15 +1,14 @@
-const path = require('path')
-const { spawn } = require('child_process')
-const db = require('../db/database.cjs')
+import path from 'path'
+import { spawn } from 'child_process'
+import db from '../db/database'
 
 const PROGRAM_NAME = 'ableton'
 const PS_SCRIPT_PATH = path.resolve(__dirname, '../..', 'scripts/findProgram.ps1')
 
-function findProgram() {
+function findProgram(): Promise<string> {
   return new Promise((resolve) => {
-    const ps = spawn('powershell.exe', ['-ExecutionPolicy', 'Bypass', '-File', PS_SCRIPT_PATH, PROGRAM_NAME], {
-      encoding: 'utf-8',
-    })
+    const args = ['-ExecutionPolicy', 'Bypass', '-File', PS_SCRIPT_PATH, PROGRAM_NAME]
+    const ps = spawn('powershell.exe', args)
 
     let output = ''
 
@@ -18,7 +17,7 @@ function findProgram() {
     })
 
     ps.stderr.on('data', (data) => {
-      console.error(`An error occured while trying to find ${programName}:`, data.toString())
+      console.error(`An error occured while trying to find ${PROGRAM_NAME}:`, data.toString())
     })
 
     ps.on('close', () => {
@@ -27,12 +26,14 @@ function findProgram() {
   })
 }
 
-class SettingsHandler {
-  _programPath = ''
-  _folders = []
+export class SettingsHandler {
+  static _programPath = ''
+  static _folders = []
 
   static async initialize() {
-    const savedPath = await new Promise((resolve) => db.getProgramPath(resolve))
+    const savedPath = await db.getProgramPath()
+
+    console.log('savedPath', savedPath)
 
     if (!savedPath) {
       const location = await findProgram()
@@ -52,5 +53,3 @@ class SettingsHandler {
     SettingsHandler._programPath = path
   }
 }
-
-module.exports = SettingsHandler

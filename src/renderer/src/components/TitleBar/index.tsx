@@ -12,7 +12,7 @@ export const TitleBar: FC = () => {
 
   const pageTitle: string = useMemo(
     () => Object.values(PAGES).find((page) => page.path === location.pathname)?.title ?? '',
-    [location.pathname]
+    [location.pathname],
   )
 
   const goBack = useCallback((): unknown => navigate(-1), [navigate])
@@ -26,8 +26,11 @@ export const TitleBar: FC = () => {
       <div className="flex w-full justify-center">
         <div className="container flex justify-center align-center relative mr-50">
           {!isHomePage && (
-            <button className="static sm:absolute left-6 md:left-12 w-auto sm:w-20 no-drag px-2 h-full gap-1 text-font-grey" onClick={goBack}>
-              <BackArrowIcon /> <span className='hidden sm:block'>Back</span>
+            <button
+              className="static sm:absolute left-6 md:left-12 w-auto sm:w-20 no-drag px-2 h-full gap-1 text-font-grey"
+              onClick={goBack}
+            >
+              <BackArrowIcon /> <span className="hidden sm:block">Back</span>
             </button>
           )}
 
