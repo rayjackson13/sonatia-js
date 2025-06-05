@@ -1,11 +1,13 @@
 import type { FC } from 'react'
-import { RouterProvider } from 'react-router'
-import { Router } from './pages/router'
+import { HashRouter } from 'react-router'
+import { Routes } from './pages/routes'
 
 export const App: FC = () => {
   return (
     <div className="w-screen h-screen flex flex-col bg-bg">
-      <RouterProvider router={Router} />
+      <HashRouter>
+        <Routes />
+      </HashRouter>
     </div>
   )
 }
