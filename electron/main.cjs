@@ -19,7 +19,12 @@ function handleDevTools() {
   })
 }
 
-function initializeWindow() {
+async function loadData() {
+  await db.init()
+  await Promise.all([SettingsHandler.initialize(mainWindow), ProjectsHandler.initialize(mainWindow)])
+}
+
+async function initializeWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 900,
@@ -37,21 +42,13 @@ function initializeWindow() {
     },
   })
 
+  await loadData()
   handleDevTools()
 
   mainWindow.loadURL('http://localhost:5173/')
 }
 
-async function loadData() {
-  await db.init()
-  await Promise.all([SettingsHandler.initialize(), ProjectsHandler.scan()])
-}
-
-app.whenReady().then(async () => {
-  await loadData()
-
-  initializeWindow()
-})
+app.whenReady().then(initializeWindow)
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()

@@ -14,8 +14,9 @@ foreach ($folder in $folders) {
 }
 
 $sorted = $abletonProjects | Sort-Object -Descending LastWriteTime
+$unique = $sorted | Group-Object -Property FullName | ForEach-Object { $_.Group[0] }
 
-$paths = $sorted | ForEach-Object { 
+$paths = $unique | ForEach-Object { 
   [PSCustomObject]@{
     path         = $_.FullName
     name         = $_.Name

@@ -17,12 +17,15 @@ export interface ElectronAPI {
   removeProjectFolder: (id: number) => Promise<void>
   addProjectFolder: () => Promise<void>
 
-  getProjects: () => Promise<Project[]>
-  openProject: (path: string) => Promise<void>
-  rescanProjects: () => Promise<Project[]>
-
   getProgramLocation: () => Promise<string>
   selectProgram: () => string | null
+
+  projects: {
+    get: () => Promise<Project[]>
+    open: (path: string) => Promise<void>
+    rescan: () => Promise<Project[]>
+    subscribe: (cb: (data: Project[]) => void) => void
+  }
 }
 
 declare global {

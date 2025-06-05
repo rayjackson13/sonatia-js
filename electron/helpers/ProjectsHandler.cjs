@@ -16,7 +16,6 @@ function findProjects(directories = []) {
     let output = ''
 
     ps.stdout.on('data', (data) => {
-      console.log(data)
       output += data.toString()
     })
 
@@ -26,7 +25,6 @@ function findProjects(directories = []) {
 
     ps.on('close', () => {
       try {
-        console.log('output', output)
         const projectPaths = JSON.parse(output)
         resolve(projectPaths)
       } catch (e) {
@@ -38,12 +36,18 @@ function findProjects(directories = []) {
 }
 
 class ProjectsHandler {
-  _projects = []
+  static _projects = []
+
+  static async initialize(mainWindow) {
+    this.mainWindow = mainWindow
+    this.scan()
+  }
 
   static async scan() {
     const folders = await db.getProjectFolders()
     const folderPaths = folders.map((item) => `"${item.path}"`)
     ProjectsHandler._projects = await findProjects(folderPaths)
+    this.mainWindow.webContents.send('projectsUpdated', this.projects)
   }
 
   static get projects() {

@@ -4,26 +4,37 @@ import { useCallback, useEffect, useState, type FC, type JSX } from 'react'
 import FileIcon from 'assets/svg/file.svg?react'
 import ReloadIcon from 'assets/svg/refresh.svg?react'
 
+const projectsAPI = window.electronAPI.projects
+
 export const RecentsView: FC = () => {
   const [projects, setProjects] = useState<Project[]>([])
+  console.log('projects', projects)
 
   const rescanProjects = useCallback(async () => {
-    const data = await window.electronAPI.rescanProjects()
+    const data = await projectsAPI.rescan()
     setProjects(data)
   }, [])
 
   const loadProjects = useCallback(async () => {
-    const data = await window.electronAPI.getProjects()
+    const data = await projectsAPI.get()
     setProjects(data)
   }, [])
 
   const openProject = useCallback(async (path: string) => {
-    window.electronAPI.openProject(path)
+    projectsAPI.open(path)
+  }, [])
+
+  const onProjectsUpdated = useCallback((data: Project[]) => {
+    console.log('projects updated')
+    setProjects(data)
   }, [])
 
   useEffect(() => {
     loadProjects()
-  }, [loadProjects])
+    const unsubscribe = projectsAPI.subscribe(onProjectsUpdated)
+
+    return unsubscribe
+  }, [loadProjects, onProjectsUpdated])
 
   const renderProjectItem = useCallback(
     (project: Project): JSX.Element => {
