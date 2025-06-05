@@ -33,7 +33,7 @@ async function initializeWindow() {
     titleBarOverlay: {
       color: '#2C2C2C',
       symbolColor: '#FFFFFF',
-      height: 40,
+      height: 32,
     },
     minWidth: 500,
     minHeight: 700,
@@ -93,11 +93,13 @@ ipcMain.handle('addProjectFolder', async () => {
 
   if (location) {
     await db.addProjectFolder(location)
+    ProjectsHandler.scan()
   }
 })
 
 ipcMain.handle('removeProjectFolder', async (_, id) => {
   await db.removeProjectFolder(id)
+  ProjectsHandler.scan()
 })
 
 ipcMain.handle('newSession', () => runProgram())

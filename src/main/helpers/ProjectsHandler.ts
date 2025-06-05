@@ -2,12 +2,17 @@ import path from 'path'
 import { spawn } from 'child_process'
 import db from '../db/database'
 import type { BrowserWindow } from 'electron'
-import type { Project } from '../../src/constants/types'
+import type { Project } from '../../types'
 
 const PS_SCRIPT_PATH = path.resolve(__dirname, '../..', 'scripts/findProjects.ps1')
 
-function findProjects(directories: string[] = []) {
+function findProjects(directories: string[] = []): Promise<Project[]> {
   return new Promise<Project[]>((resolve, reject) => {
+    if (!directories.length) {
+      resolve([])
+      return
+    }
+
     const args = ['-ExecutionPolicy', 'Bypass', '-Command', PS_SCRIPT_PATH, directories.join(',')]
     const ps = spawn('powershell.exe', args)
     let output = ''
