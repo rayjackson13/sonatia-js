@@ -21,7 +21,8 @@ function handleDevTools() {
 
 async function loadData() {
   await db.init()
-  await Promise.all([SettingsHandler.initialize(mainWindow), ProjectsHandler.initialize(mainWindow)])
+  SettingsHandler.initialize(mainWindow)
+  ProjectsHandler.initialize(mainWindow)
 }
 
 async function initializeWindow() {
@@ -36,6 +37,8 @@ async function initializeWindow() {
       symbolColor: '#FFFFFF',
       height: 40,
     },
+    minWidth: 500,
+    minHeight: 700,
     backgroundColor: '#2C2C2C',
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),

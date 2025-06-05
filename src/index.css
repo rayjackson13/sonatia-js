@@ -55,6 +55,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   font-size: 16px;
+  overflow: hidden;
+  will-change: transform;
 }
 
 #title-bar {

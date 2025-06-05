@@ -27,7 +27,7 @@ export const ProgramLocationSection: FC = () => {
       <p className="section-title">Ableton Location</p>
 
       <div className="flex justify-between inner-shadow bg-bg-deeper py-1 px-4 rounded-md">
-        <span className="block text-font-grey">{programPath}</span>
+        <span className="block text-font-grey truncate">{programPath}</span>
 
         <button className="block" onClick={changeProgramLocation}>
           <OpenFileIcon />

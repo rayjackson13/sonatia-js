@@ -25,7 +25,7 @@ export const HomePage: FC = () => {
   }
 
   return (
-    <div className="container py-24 flex flex-col gap-12">
+    <div className="container flex flex-col gap-12 justify-center">
       <RecentsView />
 
       <div className="gap-4 flex flex-col">
