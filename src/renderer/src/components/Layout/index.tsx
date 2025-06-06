@@ -20,15 +20,11 @@ export const Layout: FC = () => {
       <TitleBar />
 
       <motion.div
-        // custom={navType === 'POP' ? -1 : 1} // Back (-1), Forward (+1)
         className="flex flex-grow justify-center"
         variants={variants}
         initial="initial"
         animate="animate"
         exit="exit"
-        // initial={{ opacity: 0, y: 50 }}
-        // animate={{ opacity: 1, y: 0 }}
-        // exit={{ opacity: 0, y: -50 }}
         transition={transition}
       >
         <Outlet />
